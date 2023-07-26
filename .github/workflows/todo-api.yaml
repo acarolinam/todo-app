@@ -79,7 +79,7 @@ jobs:
         name: ${{ env.ARTIFACT_NAME }}-iac
         path: deploy/terraform/todo-api
 
-  stg:
+    stg:
     if: github.event_name != 'pull_request'
     environment: 
       name: stg
@@ -87,7 +87,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
 
-  env: # these variables will be set as environment variables for script actions and are needed to run Terraform commands
+    env: # these variables will be set as environment variables for script actions and are needed to run Terraform commands
       ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
@@ -109,8 +109,8 @@ jobs:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-    
-      - uses: hashicorp/setup-terraform@v2
+
+    - uses: hashicorp/setup-terraform@v2
       with:
         terraform_wrapper: false
 
@@ -140,7 +140,7 @@ jobs:
         terraform apply -var="dbPassword=${{ secrets.DB_PASSWORD }}" -var="env=stg" -auto-approve
         echo "WEBAPP_NAME=$(terraform output -raw webappName)" >> $GITHUB_ENV
         echo "DB_ADDRESS=$(terraform output -raw dbAddress)" >> $GITHUB_ENV
-
+    
     - name: 'Azure webapp deploy - Staging'
       id: stg-deploy
       uses: azure/webapps-deploy@v2
